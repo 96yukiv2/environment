@@ -1,0 +1,6 @@
+cask "visual-studio-code"
+cask "cursor"
+cask "orbstack"
+cask "raycast"
+cask "google-japanese-ime"
+cask "ghostty"
