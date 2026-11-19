@@ -1,29 +1,21 @@
-
 ---
 name: how
-description: コードの仕組み、処理の流れ、責務や配置を調べて説明するときに使用する。
+description: "Use for \"how does X work\", code walkthroughs before changing something, and placement / ownership / layering questions (\"where should this live\", \"which package owns this\", \"is this the right layer\"). Explains subsystem architecture, runtime flow, onboarding mental models. Use why for motivation."
+disable-model-invocation: true
 ---
 
 # How
 
-出典: https://github.com/cursor/plugins/blob/main/pstack/skills/how/SKILL.md
+Explore the codebase to answer "how does X work?" questions.
 
-## 調査
+If the scope is ambiguous, state your interpretation and explore. The user can redirect.
 
-対象となるコードを読み取り専用で調査する。
+## 1. Explain
 
-利用可能な場合は、独立した調査エージェントに委任する。
+Spawn one Task subagent with `subagent_type: generalPurpose` and `readonly: true` that explores and explains in one pass. Give it the user's question and this brief:
 
-調査担当には次を指示する。
+> You are writing an architectural explanation for a senior engineer. Explore the codebase and write an explanation that a senior engineer unfamiliar with this area could read and walk away with a solid mental model. They should understand the architecture well enough to start working in it confidently. You have read-only access to the codebase.
 
-- アーキテクチャと主要なコンポーネントを説明する。
-- 実行時の処理とデータの流れを追う。
-- モジュール間の責務と依存関係を説明する。
-- 初見のエンジニアが実装に着手できる程度まで説明する。
+## 2. Present
 
-対象が曖昧なら解釈を示して調査する。
-
-## 提示
-
-調査結果を提示する。
-明瞭さのための編集は許容するが、内容を大幅に書き換えない。
+Present the subagent's output. Light edits for clarity or context from the conversation are fine. Do not substantially rewrite it.

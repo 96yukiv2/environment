@@ -1,50 +1,52 @@
-
 ---
 name: figure-it-out
-description: 既存の手順に当てはまらない複雑な作業について、検証可能な作業計画を設計・実行するときに使用する。
+description: "Design an auditable playbook when no narrower one fits: a large migration, an ambitious multi-part change, or work a human reviews after stepping away. Scales rigor to the task, runs a hypothesis loop, and logs decisions. Use for /figure-it-out or 'figure it out'."
+disable-model-invocation: true
 ---
 
 # Figure it out
 
-出典: https://github.com/cursor/plugins/blob/main/pstack/skills/figure-it-out/SKILL.md
+When the task matches no playbook, design one. The deliverable before any code is the workflow itself: a sequence of phases that scales rigor to the task, runs the scientific method, and leaves a decision trail a human can audit after stepping away.
 
-適切な作業手順が存在しない場合は、作業そのものの手順を設計する。
+## Start
 
-## Phase A: 目的と範囲
+Open a todolist whose first item is to read the Principles section of the **poteto-mode** skill. Then add the phases below as todos.
 
-- 完了条件を検証可能な形で定義する。
-- 作業範囲、規模、障害となる条件を明確にする。
-- リスクに応じて検証の厳密さを決める。
+## Phase A: Frame
 
-## Phase B: 作業手順の設計
+Ground first, then commit. Don't start the run until you can state:
 
-- 独立して検証できる単位へ分割する。
-- 不確実性の高い作業から順番に進める。
-- 実装より先に検証方法と基準値を用意する。
-- 重要な設計判断には複数案を比較する。
-- 並列作業では共有状態の競合を避ける。
-- 実行するフェーズを記録する。
+- The definition of done as a falsifiable predicate (the **prove-it-works** principle skill).
+- Scope, quantified: rough units and effort, plus the blockers grounding surfaced.
+- The rigor level, biased high. One-way doors and high blast radius get more. Reversible low-stakes steps get less. Rigor is gates and artifacts, not "try harder".
 
-## Phase C: 実行
+Present the framing and tradeoffs before committing to a long run. Reversible work proceeds (the **never-block-on-the-human** principle skill), but a multi-hour run earns one checkpoint.
 
-各作業を実験として扱う。
+## Phase B: Design the workflow
 
-1. 仮説を立てる。
-2. 仮説を検証する変更を行う。
-3. 実際の成果物を使って測定する。
-4. 改善が確認できれば採用する。
-5. 改善しなければ元に戻す。
+Decompose into atomic, independently-landable units. Sequence riskiest-unknown-first. Scaffold and verification come before features (the **foundational-thinking** principle skill).
 
-検証結果は VERIFIED、NOT VERIFIED、INCONCLUSIVE を区別する。
+- Build the verification harness before the work, with the baseline captured from the pre-change state, so the check reads as "old value vs new value".
+- For one-way-door design decisions, run the **architect** skill (it runs **arena**). Skip it for mechanical work whose shape is already concrete. A second arena over a settled design is over-engineering (the **laziness-protocol** principle skill).
+- Decide what fans out. Parallelize only across seams, and give each worker its own worktree or branch (the **separate-before-serializing-shared-state** principle skill). Don't over-fan. Pick each subagent's reasoning level for the job, per the Subagents section of the **poteto-mode** skill.
+- Write the designed phase list down. That list is what the human reviews.
 
-## Phase D: 判断履歴
+Then execute the design. Add its steps to the todolist as concrete items between the Phase C and Phase D entries. Run each under the Phase C loop discipline, and weave the Phase D log through them, a row as each step lands, rather than saving the whole trail for the end.
 
-実行した内容、根拠、結果、判断を記録する。
+## Phase C: Run the loop
 
-## Phase E: 最終検証
+Each unit is an experiment. State the hypothesis, make the smallest change, measure against the predicate on the real artifact, keep it if it advanced, revert it if it didn't. Apply the **sequence-verifiable-units** principle skill, verifying each unit before starting the next instead of batching checks at the end.
 
-最初に定義した完了条件に対して、成果物全体を検証する。
+- Verify by inspecting the artifact, never a self-report. When something passes too easily, suspect the observation method before the system.
+- Pair delegated work with a judge. If a worker games the gate, reset and harden the contract. If the gate itself is wrong, fix the gate in its own change rather than routing around it.
+- A verdict is VERIFIED, NOT VERIFIED, or INCONCLUSIVE. Inconclusive is not a pass. Don't hide a negative.
 
-## 報告
+## Phase D: Keep the audit trail
 
-作業手順、検証の厳密さ、判断履歴、確認済み事項、残課題を報告する。
+Log the run via the **show-me-your-work** skill. figure-it-out's work is usually ambitious enough to commit the trail so the reviewer can read it in the PR. The trail plus the diff is what lets the human come back and trust the work.
+
+## Phase E: Verify and hand back
+
+Check the whole against the Phase A predicate on the real product, not just the harness. Encode any recurring correction as a gate, a lint rule, a check, or a script (the **encode-lessons-in-structure** principle skill).
+
+**Reply:** the playbook you designed, the rigor level and why, the decision-trail path, what's verified against the predicate, and what's still open.

@@ -1,27 +1,31 @@
 ---
 name: interrogate
-description: 変更や設計を意図的に壊す条件を探し、実際の実行で立証された問題だけを報告する。修正は適用しない。
+description: "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Adversaries try to break a change or design, and only findings proven by a run survive."
 disable-model-invocation: true
 ---
 
-# interrogate
+# Interrogate
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/interrogate/SKILL.md
+Adversaries try to break a change or a design. A finding survives only when a run proves it. Report the findings. Do not apply fixes.
 
-変更や設計を意図的に壊す条件を探し、実際の実行で立証された問題だけを報告する。修正は適用しない。
+## Frame
 
-## 対象の確定
-ユーザーの指定範囲を優先する。指定がなければ基準ブランチとのマージベースから作業ツリーを含む差分を調べる。依頼、コミット、PRを読み、in-your-own-wordsで意図を言い換える。
+The scope is what the user names. Otherwise it is the branch diff from its merge base with the base branch, through the working tree. State the intent with the **in-your-own-words** skill, from the user's message, the commits, and the PR description. Ask the user when the intent is unclear.
 
-## 並列の反証
-arenaのPhase A（担当の選定、独立した作業領域）とPhase B（並列実行）を使用する。各担当に同じ目的と差分を与える。未コミットの変更も個別の作業領域へ反映する。対象を壊す再現スクリプトやテストを動かし、問題、実行コマンド、実際の出力、期待される出力を報告させる。実行できない指摘は残さない。複数エージェントが使えなければ単独で同じ手順を行い制約を明記する。
+## Fan out
 
-## 検証
-arenaのPhase Fと同じく、指摘を再実行し、再現性と意図からの逸脱を確かめる。arenaのPhase C、D、Eは実行しない。原因が同じ指摘はまとめる。
+Run Phase A steps 3 and 4 and Phase B of the **arena** skill, with four changes. Read the `interrogate reviewers` line in place of `arena runners`. Copy the scope's uncommitted changes into each worktree. Spawn each adversary as `generalPurpose`. In place of the arena task and rationale, give each adversary the scope, the intent, and this brief:
 
-## 出力
-目的、検証済みの問題とコマンド・出力・期待値、見つけた担当、除外した指摘の件数と理由を報告する。検証済みの問題ゼロも有効な結果とする。
+> Break this change. Prove each finding with a run against the real code, such as a failing test, a repro script, or command output that shows the wrong behavior. For a design or plan, run a prototype or probe the current tree. Keep repros in your own worktree. Report each finding with a title, the exact command, the output it printed, and the output the intent requires. Leave out anything you did not run. That covers style, naming, structure, and risks that need a future change to matter. No findings is a valid result.
 
-## 実行上の制約
+## Verify
 
-モデルを固定しない。ローカルの編集、Git操作、外部送信はルートのAGENTS.mdに従う。
+Verify each finding per arena Phase F by rerunning its command. Keep a finding when the output shows the failure and the failure breaks the intent. Drop the rest. Merge findings that share a root cause.
+
+Skip arena Phases C, D, and E. Adversaries find different failures, so the verdict keeps every verified finding, not one adversary's list.
+
+## Output
+
+- **Intent**: the restatement.
+- **Findings**: for each verified finding, the command, its output, how it breaks the intent, and the adversaries that found it. Say "no verified findings" when none survive.
+- **Dropped**: for each adversary, the count of dropped findings and why.

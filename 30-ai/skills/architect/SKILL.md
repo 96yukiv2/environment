@@ -1,23 +1,11 @@
-
 ---
 name: architect
-description: 実装前に型、関数、モジュール構成を設計し、適切な構造を選択するときに使用する。
+description: "Sketch types, signatures, and module structure before code, then stay in the loop while implementation fills in. Use for /architect, 'architect this', 'design this', or non-trivial work where jumping to code would lock in the wrong shape."
+disable-model-invocation: true
 ---
 
 # Architect
 
-出典: https://github.com/cursor/plugins/blob/main/pstack/skills/architect/SKILL.md
+Before writing code, trace every system the change touches, then sketch two different shapes for it (types, signatures, module boundaries) and pick the one where each piece of state has one owner, each task has one way to do it, and callers need to know least. Redesign instead of patching if workarounds repeat.
 
-コードを書く前に、変更が影響するシステムを調べる。
-
-型、関数シグネチャ、モジュール境界について異なる2案を作成する。
-
-次の基準で設計を選択する。
-
-- 各状態の所有者が一つに定まっている。
-- 各処理に対して標準となる実装方法が一つ存在する。
-- 呼び出し元が知る必要のある内部情報が少ない。
-
-回避策が繰り返し必要になる場合は、追加の修正ではなく設計の見直しを優先する。
-
-大規模または意見が対立する設計では、複数案を独立して検証する。
+For a large or contested design, run the **arena** skill instead of sketching alone.

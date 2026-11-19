@@ -1,45 +1,32 @@
-
 ---
 name: correct
-description: AIが繰り返すミスを調査し、構造や自動チェックによって再発を防ぐときに使用する。
+description: "Find the mistakes agents keep repeating in this repo and make each one impossible. Try architecture first, then types, then a lint whose error names the fix, then a test, and write docs last. Prove each check fails on a real past mistake. Repeat this each time the operator corrects you. Use for /correct."
+disable-model-invocation: true
 ---
 
 # Correct
 
-出典: https://github.com/cursor/plugins/blob/main/pstack/skills/correct/SKILL.md
+The operator keeps correcting agents in this repo for the same mistakes. Change the repo so the next agent can't make them.
 
-同じミスを繰り返し指摘する必要がないように、リポジトリの仕組みを改善する。
+Assume every contributor is an agent that sees only the files it opened, copies the nearest example, and takes the shortest path that compiles. Design the repo so a change that looks right from one file is right for the whole repo.
 
-## ミスの分類
+## Find the mistake classes
 
-最近のコミット、Revert、レビュー指摘、AI設定、回避策に関するコメントを調査する。
+First, read recent commits, reverts, review comments, agent instruction files, and comments that explain workarounds. Group the mistakes into classes. A class counts once it has happened twice.
 
-同じ種類のミスが2回以上発生した場合に、再発防止の対象とする。
+## Fix each class at the highest level that works
 
-## 再発防止
+1. **Eliminate it with architecture.** Give each piece of state one owner and each task one supported way. Hide internals so the wrong import fails. Replace hand-synced lists with one source of truth. Delete old ways and dead code an agent would copy.
+2. **Enforce it with types so the bad state can't be written.** If bad code still compiles, add a lint or CI check whose error names the file, type, or function to use instead. If the pattern is already common, fail only when a change adds more.
+3. **Test the behavior.** Fix or delete any test that still passes when the behavior it checks breaks, or that fails when only the internals change.
+4. **Write docs or agent rules last, only for judgment calls.** Nothing fails when an agent skips them.
 
-次の順番で対応方法を選ぶ。
+## Fix and prove
 
-1. アーキテクチャで誤った実装方法を排除する。
-2. 型で不正な状態を表現できないようにする。
-3. LintやCIで誤ったコードを検出する。
-4. 振る舞いを検証するテストを追加・修正する。
-5. 判断が必要な内容だけをドキュメントやAIルールに書く。
+Then fix the most frequent classes now, one commit each. Prove each new check fails on a real past mistake. Run the same command locally and in CI. Exceptions go on the offending line with a reason, an expiry date, and a human's approval.
 
-## 修正と検証
+## Keep the rule table
 
-頻繁に発生するミスから対応する。
+Last, keep a table in the agent instruction file that pairs each rule with what enforces it. When the operator corrects you, fix the mistake and add the rule. If the rule was already there and nothing enforces it, that's a repeat, so fix it at the highest level in the same change. Drop a rule once its mistake can't happen.
 
-追加したチェックが過去の実際のミスを検出できることを確認する。
-
-必要な例外には理由と期限を記録する。
-
-## ルールの管理
-
-AI設定にはルールと、それを強制する仕組みの対応を記録する。
-
-同じ違反が繰り返された場合は、文章を増やすのではなく強制方法を改善する。
-
-## 報告
-
-ミスの種類、根拠、採用した防止方法と理由を報告する。
+**Reply:** each class with its evidence, the level you picked, and why a higher level didn't work.
