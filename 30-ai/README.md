@@ -10,6 +10,50 @@ Lauren Tanの[pstack](https://github.com/cursor/plugins/tree/main/pstack)を基�
 
 つまり、**Playbookが作業の進め方を決め、Skillsが各段階で必要な能力を提供する**。どちらもファイルを置くだけで自動実行されるわけではない。利用するAIが内容を読み込んで実行する。
 
+## 参照する順番
+
+開発依頼では、**作業のルール → 作業の種類 → 手順書 → 必要な能力 → 実際の検証**の順で考える。
+
+```mermaid
+flowchart TD
+    A["ユーザーが開発を依頼"] --> B["AGENTS.md<br/>開発原則・作業権限"]
+    B --> C["workflow-router<br/>作業の種類を判断"]
+    C --> D["Playbook<br/>作業全体の手順"]
+    D --> E["必要なSkills<br/>調査・設計・実装・検証"]
+    E --> F["成果物を確認して報告"]
+    F -. "追加の調査や修正が必要な場合" .-> E
+```
+
+- **[AGENTS.md](../AGENTS.md)**：作業全体に共通する判断基準と、Git操作・外部変更などの権限を定める。どのPlaybookよりも優先する。
+- **[workflow-router](skills/workflow-router/SKILL.md)**：依頼に合うPlaybookを選択するためのSkill。該当ファイルを実際に読んでから作業する。
+- **[Playbooks](playbooks/)**：再現、原因調査、修正、検証など、作業全体の進め方を定める。
+- **[Skills](skills/)**：各段階で必要な具体的な技法を提供する。Playbookを介さず単独で使う場合もある。
+- **検証・報告**：実際の成果物で完了条件を確認する。PlaybookやSkillを読んだだけでは完了にならない。
+
+### 例：バグを修正する場合
+
+```mermaid
+flowchart TD
+    A["このバグを修正して"] --> B["bug-fix.md<br/>修正全体の手順を読む"]
+    B --> C["再現と原因調査"]
+    C --> D["why<br/>変更履歴が必要なら調査"]
+    D --> E["architect<br/>設計変更が必要なら使用"]
+    E --> F["tdd<br/>再現テストが実用的なら使用"]
+    F --> G["修正後に元の不具合を再検証"]
+    G --> H["blast-radius<br/>影響範囲を確認"]
+    H --> I["結果を報告"]
+```
+
+これは一例であり、**すべてのSkillを毎回順番に使用するという意味ではない**。例えば読み取りだけの調査なら `investigation` Playbookと `how` Skillで十分な場合がある。簡単な文章修正では、Playbookを使わず `technical-writing` Skillを直接使ってもよい。
+
+### Cursorでの読み込みに関する注意
+
+`20-scripts/cursor.sh` の実行後、Skillsは `~/.cursor/skills/`、Playbooksは `~/.cursor/playbooks/` から参照できるようになる。
+
+ただし、`~/.cursor/playbooks/` は**Playbookの保存先として作成したシンボリックリンク**であり、Cursorによる自動検出機能ではない。Playbookを実際に読むには、`workflow-router` またはプロジェクト側の指示が必要。
+
+また、`environment/AGENTS.md` はほかのリポジトリへ自動で適用されない。別プロジェクトでは、そのプロジェクトの指示やCursorの共通ルールに従う。必要なら `workflow-router` の使用を明示して、選択したPlaybookの実ファイルを確認する。
+
 ## よく使うSkills
 
 | 名前 | 何をするか | 使うタイミング |
