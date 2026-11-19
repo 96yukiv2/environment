@@ -1,6 +1,7 @@
 {
     "workbench.activityBar.compact": true,
     "workbench.activityBar.location": "top",
+    "window.density.layout": "compact",
     "github.copilot.nextEditSuggestions.enabled": false,
     "github.copilot.enable": {
         "*": false
