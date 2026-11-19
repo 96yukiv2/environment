@@ -1,15 +1,14 @@
 ---
 name: principle-build-the-lever
-description: 再利用できる道具を作る。重要な作業では、必要に応じてコード変換、スクリプト、ジェネレーターなどを作る。
+description: "Apply to any non-trivial work, not just bulk work: edits, migrations, analyses, checks. Build the tool that does it or proves it (codemod, script, generator, or a skill your subagents follow) instead of working by hand. The tool is the artifact a reviewer can rerun."
 disable-model-invocation: true
 ---
 
-# 再利用できる道具を作る（Build the Lever）
+# Build the Lever
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-build-the-lever/SKILL.md
+When the work isn't trivial, build the tool that does it (a codemod, script, generator, or rerunnable check) instead of doing it by hand. The bar is triviality, not repetition. Skip the tool only for a couple of obvious edits.
 
-重要な作業では、必要に応じてコード変換、スクリプト、ジェネレーターなどを作る。
-
-## 適用
-
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+- Do the first unit by hand, then build the tool and prove it by rerunning it on that unit. Make it safe to rerun.
+- A deterministic tool beats fan-out. When you do fan out, write the recipe, the verification contract, and the fences as one skill the delegates read and cannot edit.
+- Applying this produces a file. No script, codemod, generator, or delegate skill in the diff means you didn't apply it. Commit it when the work outlives the session.
+- Build the smallest script that does or proves the job, never a framework.

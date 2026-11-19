@@ -1,15 +1,14 @@
 ---
 name: principle-fix-root-causes
-description: 根本原因を修正する。症状が現れた場所ではなく、最初に誤った状態や判断が発生した場所を特定する。
+description: "Apply when debugging. Trace each symptom back to the first place the system went wrong and fix it there. A guard is a fix only when the state it handles is legitimate."
 disable-model-invocation: true
 ---
 
-# 根本原因を修正する（Fix Root Causes）
+# Fix Root Causes
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-fix-root-causes/SKILL.md
+Fix the fault, not the place where it surfaced. The root cause is the first place the system did something it should not do, or failed to handle a state it should handle.
 
-症状が現れた場所ではなく、最初に誤った状態や判断が発生した場所を特定する。
-
-## 適用
-
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+- Reproduce first. Ask "why" until the answer is a wrong decision in the code. When stuck, instrument and read the actual state.
+- Ask whether the state that triggered the symptom is legitimate. If it is, handle it where the code broke. If it should never exist, a check there hides the bug, so find what produced it. Guards, retries, swallowed errors, clamped values, and discarded state are the usual ways to hide a bug.
+- Fix the pattern, not the instance. Find every place with the same fault.
+- If the deciding fact took a deep dig, propose the cheap, always-on signal that would have shown it at first look.

@@ -1,15 +1,13 @@
 ---
 name: principle-foundational-thinking
-description: 基礎から考える。ロジックを書く前に、主要な型とデータ構造を考える。
+description: "Apply before writing logic: choosing core types and data structures, sequencing scaffold-vs-feature work, asking what concurrent actors share. Get the data structures right so downstream code becomes obvious."
 disable-model-invocation: true
 ---
 
-# 基礎から考える（Foundational Thinking）
+# Foundational Thinking
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-foundational-thinking/SKILL.md
+Get the data shape right before writing logic. Define core types early, trace every access pattern, and choose structures that match the dominant paths. DRY the structure, not every line.
 
-ロジックを書く前に、主要な型とデータ構造を考える。
+Before sharing state between actors, ask what happens if another actor modifies it concurrently. If the answer is not "nothing", isolate.
 
-## 適用
-
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+Scaffold first. Whatever helps every later phase (CI, tests, shared types) goes first, after removing dead code. Keep commits small and single-purpose.

@@ -1,15 +1,14 @@
 ---
 name: principle-explain-the-number
-description: 数値の意味を説明する。性能や処理時間などを計測する場合は、何が測定結果を決めるかを調べる。
+description: "Apply before you measure, and before you trust, report, or act on a number you measured: a speedup, a regression, a throughput, a latency, or an eval result. Find what limits it, and rule out that it measured something other than the work you think."
 disable-model-invocation: true
 ---
 
-# 数値の意味を説明する（Explain the Number）
+# Explain the Number
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-explain-the-number/SKILL.md
+- **Write the decision before you run.** Name the result that would change it, and the noise floor. Stop when the run-to-run spread is larger than the effect.
+- **Ask "why not double?"** Name the resource or code path that bounds the result, from a profile or counters taken during a run. A guess from reading the code is not a limiter.
+- **List what else the number could be measuring** (errors, skipped or cached work, code that never ran, an untuned side, noise, a piece too small to matter) and rule out each one with evidence.
+- **Keep the run count, the spread, and the limiter with the number.**
 
-性能や処理時間などを計測する場合は、何が測定結果を決めるかを調べる。
-
-## 適用
-
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+For a performance number, run the [benchmark-checklist](../benchmark-checklist/SKILL.md) skill. For an eval result, ask whether every run did the task, whether the gap holds across trials and models, and whether the scenario matters.

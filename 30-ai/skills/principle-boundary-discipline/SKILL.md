@@ -1,15 +1,11 @@
 ---
 name: principle-boundary-discipline
-description: 境界を明確にする。入力の検証や外部システムへの適応は境界で行う。
+description: "Apply when wiring validation, error handling, or framework adapters. Concentrate guards at system boundaries (CLI, config, network, external APIs); trust internal types and keep business logic in pure functions."
 disable-model-invocation: true
 ---
 
-# 境界を明確にする（Boundary Discipline）
+# Boundary Discipline
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-boundary-discipline/SKILL.md
+Validate, narrow types, and handle errors where data crosses a system boundary (CLI args, config files, external APIs, network). Inside, trust the types: no re-validation and no redundant nil checks. Parse raw data into domain types at the boundary, and keep transport and framework types out of the public surface. Business logic lives in pure functions with no framework dependencies. The shell that calls them is thin.
 
-入力の検証や外部システムへの適応は境界で行う。
-
-## 適用
-
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+Two tests. Is this data crossing a boundary right now? If not, the validation is redundant. Can this be a pure function the shell just calls? If yes, extract it.

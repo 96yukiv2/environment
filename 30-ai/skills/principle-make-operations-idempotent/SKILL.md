@@ -1,15 +1,15 @@
 ---
 name: principle-make-operations-idempotent
-description: 操作を冪等にする。再試行やクラッシュが発生する処理では、同じ操作を繰り返しても目的の状態に収束するようにする。
+description: "Apply when designing commands, lifecycle steps, or processing loops that run amid crashes, restarts, and retries. Converge to the same end state regardless of partial prior runs."
 disable-model-invocation: true
 ---
 
-# 操作を冪等にする（Make Operations Idempotent）
+# Make Operations Idempotent
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-make-operations-idempotent/SKILL.md
+Design every state-changing operation to converge to the correct state however many times it runs and wherever the previous run stopped.
 
-再試行やクラッシュが発生する処理では、同じ操作を繰り返しても目的の状態に収束するようにする。
+Derive each step from the state that exists, not from what the previous run meant to do. Read the current state, compare it to the goal, and apply only the difference.
 
-## 適用
+Anything a run leaves behind (a lock, a temporary file, a half-written record, a claimed job) must be recognizable as stale by the next run, by evidence that holds wherever the previous run could have stopped. Write to a temporary path and rename it into place.
 
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+The test: what happens if this runs twice? What if the previous run crashed at every possible point? If the answer depends on what was left behind, add a reconciliation step.

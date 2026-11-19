@@ -1,15 +1,19 @@
 ---
 name: principle-experience-first
-description: 体験を優先する。製品の機能やUIを設計するとき、実装の都合より利用者の体験を優先する。
+description: "Apply when product, UX, or feature-scope tradeoffs come up. Choose user delight over implementation convenience; ship fewer polished features over more rough ones."
 disable-model-invocation: true
 ---
 
-# 体験を優先する（Experience First）
+# Experience First
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-experience-first/SKILL.md
+When implementation convenience conflicts with user delight, choose delight.
 
-製品の機能やUIを設計するとき、実装の都合より利用者の体験を優先する。
+- Every feature, control, and option must be justified
+- Ship less, ship better (polished experience with three features beats rough one with ten)
+- Prototype before committing (design decisions are cheaper in throwaway HTML than production code)
+- Get the details right (transitions, alignment, spacing, feedback, error states)
+- Tighten the core loop (every feature should serve the central workflow or get out of the way)
 
-## 適用
+The user is whoever consumes the work. For a UI that is the end user. For a library or an internal API it is the colleague who imports it. The engineer who maintains the code next is a user too. Weigh their experience the same way, and explain impact from their perspective.
 
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+Foundations should serve the experience. Foundational thinking governs the *sequence* of work. This principle governs the *target*.

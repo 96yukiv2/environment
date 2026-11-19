@@ -1,15 +1,15 @@
 ---
 name: principle-attack-the-premise
-description: 前提を疑う。同じ前提に基づく複数の修正が失敗した場合、さらに修正を重ねない。
+description: "Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it."
 disable-model-invocation: true
 ---
 
-# 前提を疑う（Attack the Premise）
+# Attack the Premise
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-attack-the-premise/SKILL.md
+When two or more fixes that share one premise have failed the same gate, suspect the premise, not the fixes.
 
-同じ前提に基づく複数の修正が失敗した場合、さらに修正を重ねない。
+- Write the premise down: the one sentence every failed fix assumed.
+- Test it before the next fix. Find an observation that would come out differently if the premise were false, and make it. Look at how the failures are distributed, not only at how large they are.
+- If the evidence contradicts the premise, look for what the failures share that it did not predict. If one part always lands on the losing side, change what puts it there instead of adding a mechanism that cleans up after it.
 
-## 適用
-
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+Do not start the next fix before the premise is written down and tested.
