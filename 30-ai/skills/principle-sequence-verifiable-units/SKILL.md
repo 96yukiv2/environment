@@ -1,15 +1,13 @@
 ---
 name: principle-sequence-verifiable-units
-description: 検証可能な単位で進める。複数段階の変更は、それぞれ独立して検証できる単位に分割する。
+description: "Apply to multi-step work (sweeps, migrations, runs of similar edits) and to how you stack commits and PRs. Break work into small units that each end in a verifiable state, check each before the next, and order delivery so the sequence proves itself to a reviewer."
 disable-model-invocation: true
 ---
 
-# 検証可能な単位で進める（Sequence Work into Verifiable Units）
+# Sequence work into verifiable units
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-sequence-verifiable-units/SKILL.md
+Order work as small units that each end in a state you can check, and do not advance until the current one is green.
 
-複数段階の変更は、それぞれ独立して検証できる単位に分割する。
+In a sweep, migration, or run of similar edits, each unit is a bracket: known-good state, one change, run the check, proceed. Run the per-unit check even when a tool does the edits.
 
-## 適用
-
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+Deliver in the order that proves the work: the failing test first, then the fix. The subtraction before the reshape. The baseline before the treatment. Each commit lands on its own.

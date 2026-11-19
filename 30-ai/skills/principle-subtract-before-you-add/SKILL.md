@@ -1,15 +1,18 @@
 ---
 name: principle-subtract-before-you-add
-description: 足し算の前に引き算。機能追加、リファクタリング、書き直しでは、最初に不要なコードや構造を取り除く。
+description: "Apply when sequencing an addition, refactor, or rewrite. Remove dead code, redundant validators, and stub references first, then build on the simpler base."
 disable-model-invocation: true
 ---
 
-# 足し算の前に引き算（Subtract Before You Add）
+# Subtract Before You Add
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-subtract-before-you-add/SKILL.md
+When evolving a system, remove complexity first, then build. Default to subtraction.
 
-機能追加、リファクタリング、書き直しでは、最初に不要なコードや構造を取り除く。
+Make simplification a continual investment. Leave the design slightly simpler and more capable behind the same or smaller surface than you found it.
 
-## 適用
-
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+- Sequence removal before construction
+- Cut before you polish (get to the minimum before investing in quality)
+- Design for observed usage, not speculative edge cases
+- No speculative validators, parsers, or guards beyond what the spec demands
+- Simplify prompts (remove redundant instructions, excessive templates)
+- When a reference has no novel content, delete it rather than leaving a stub

@@ -1,15 +1,15 @@
 ---
 name: principle-type-system-discipline
-description: 型システムを規律正しく使う。不正な状態を表現できない型を設計する。
+description: "Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, exhaust variants, derive from authoritative schemas."
 disable-model-invocation: true
 ---
 
-# 型システムを規律正しく使う（Type System Discipline）
+# Type System Discipline
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-type-system-discipline/SKILL.md
+Make the compiler reject impossible states, mismatched primitives, and unhandled variants.
 
-不正な状態を表現できない型を設計する。
+- **Brand semantic primitives.** If two arguments share a primitive type but mean different things, give each its own type. Validate once at creation.
+- **External data is untyped until parsed.** JSON, RPC payloads, CLI args, config, environment variables, and database rows go through a parse function at the boundary that returns the typed model.
+- **Derive types from authoritative schemas.** When a schema file owns a shape, derive the type from it instead of hand-rolling a parallel one.
 
-## 適用
-
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+For TypeScript syntax, see the **typescript-best-practices** skill.

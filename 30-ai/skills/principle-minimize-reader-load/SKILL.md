@@ -1,15 +1,15 @@
 ---
 name: principle-minimize-reader-load
-description: 読み手の負荷を減らす。コードを理解するために追跡するレイヤーや隠れた状態を減らす。
+description: "Apply when reviewing or shaping code that's hard to trace. Count layers between question and answer, and hidden state in the reader's head; collapse one-caller wrappers and shrink mutable scope."
 disable-model-invocation: true
 ---
 
-# 読み手の負荷を減らす（Minimize Reader Load）
+# Minimize Reader Load
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-minimize-reader-load/SKILL.md
+Reader load is the work a reader must do to understand code. It has two independent axes: layers to trace between the question and the answer, and hidden or mutable state to hold in their head. Guard both.
 
-コードを理解するために追跡するレイヤーや隠れた状態を減らす。
+- Collapse layers that only forward: wrappers with one caller, adapters with no second implementation, pass-through methods. Inline them.
+- Shrink state scope: returns over mutations, locals over fields, fields over module state, module state over globals. Derive instead of sync.
+- Name an invariant once at the boundary, not in every consumer.
 
-## 適用
-
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+The test: can a new reader answer "where does X come from?" and "what can change X?" in under 30 seconds? If not, cut layers or cut state.

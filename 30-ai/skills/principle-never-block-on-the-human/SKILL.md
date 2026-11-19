@@ -1,15 +1,15 @@
 ---
 name: principle-never-block-on-the-human
-description: 人間の判断待ちで不要に停止しない。安全で可逆的、かつ依頼された範囲の作業は、自律的に進める。
+description: "Apply when tempted to ask 'should I do X?' on reversible work."
 disable-model-invocation: true
 ---
 
-# 人間の判断待ちで不要に停止しない（Never Block on the Human）
+# Never Block on the Human
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-never-block-on-the-human/SKILL.md
+The human supervises asynchronously. Agents must stay unblocked. Make reasonable decisions, proceed, and let the human course-correct after the fact. Since code changes are reversible and reviewable, a wrong decision usually costs less than blocking.
 
-安全で可逆的、かつ依頼された範囲の作業は、自律的に進める。
-
-## 適用
-
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+- Proceed, then present. Do the work, show the result. Don't ask "should I do X?" Do X, explain why.
+- Make the system self-healing. When you notice a problem, log it and fix it in the next round.
+- Irreversible actions (force-push, delete production data, send external messages) still require confirmation.
+- Reversible actions (write code, edit notes, split tasks) should proceed without blocking.
+- Product direction comes from the human. Execution should not block.

@@ -1,15 +1,15 @@
 ---
 name: principle-model-the-domain
-description: ドメインをモデル化する。状態を持つ処理や条件分岐の多い処理では、ドメインを明確な構造で表現する。
+description: "Apply when writing stateful logic, or when code branches a lot or repeats a shape assumption across files."
 disable-model-invocation: true
 ---
 
-# ドメインをモデル化する（Model the Domain）
+# Model the Domain
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-model-the-domain/SKILL.md
+Encode the domain in a data structure instead of scattering it across conditionals. The right structure makes invalid states unrepresentable and deletes branches.
 
-状態を持つ処理や条件分岐の多い処理では、ドメインを明確な構造で表現する。
+Reach for a state machine instead of scattered booleans or phase checks, a typed model instead of loose parameters, a map, registry, or discriminated union instead of branching spread across files, a reducer instead of ad hoc mutations, and an index, queue, or normalized collection where the access pattern calls for it.
 
-## 適用
+Do not force it. Keep boring code when the shape is clear, local, and unlikely to grow, and distrust an abstraction that adds indirection without removing branches or invalid states.
 
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+The sign that you skipped this: a feature that grows an if/else chain by one more branch, or a second boolean that must stay in sync with the first.

@@ -1,15 +1,11 @@
 ---
 name: principle-separate-before-serializing-shared-state
-description: 共有状態の競合を避ける。並列の処理やエージェントが同じファイル、ブランチ、キー、オブジェクトを更新する場合は、まず共有そのものを取り除けないか検討する。
+description: "Apply when concurrent actors might write to the same file, branch, key, or state object. Eliminate the sharing first; serialize structurally only when one shared writer is a real invariant."
 disable-model-invocation: true
 ---
 
-# 共有状態の競合を避ける（Separate Before Serializing Shared State）
+# Separate Before Serializing Shared State
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/principle-separate-before-serializing-shared-state/SKILL.md
+When concurrent actors might write the same file, branch, key, or object, first ask whether they need one shared object or are publishing independent facts. Default to giving each actor its own file, key, branch, or state directory, and merge only where the state is read. Two workers writing their own field into one `state.json` is still shared mutation.
 
-並列の処理やエージェントが同じファイル、ブランチ、キー、オブジェクトを更新する場合は、まず共有そのものを取り除けないか検討する。
-
-## 適用
-
-この原則が関連する作業を行うとき、原典の判断基準を優先し、変更内容と実際に確認した証拠を記録する。作業権限についてはルートのAGENTS.mdを優先する。
+Only when one shared write target is a real invariant, serialize access structurally (a lockfile, a single writer, sequential phases, compare-and-swap). Instructions are not concurrency control, and "we need a lock" is a smell to check first.
