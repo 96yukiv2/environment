@@ -1,58 +1,6 @@
 # Skills
 
-Lauren Tanの[pstack](https://github.com/cursor/plugins/tree/main/pstack)を基に、日本語化・環境向けに調整したSkillsとPlaybooks。共通の開発原則と作業権限は[AGENTS.md](../AGENTS.md)に記載する。
-
-## SkillsとPlaybooksの違い
-
-**Skills**は、特定の能力や判断手順を使い回すための定義。例えば`architect`は設計案の比較、`tdd`は失敗するテストからのバグ修正、`blast-radius`は影響調査を担当する。単独でも、別のSkillやPlaybookからも利用できる。
-
-**Playbooks**は、作業全体を最初から最後まで進めるための手順書。例えば`bug-fix`は「再現→原因特定→修正→検証」という流れを定め、その途中で`why`、`architect`、`tdd`などを利用する。
-
-つまり、**Playbookが作業の進め方を決め、Skillsが各段階で必要な能力を提供する**。どちらもファイルを置くだけで自動実行されるわけではない。利用するAIが内容を読み込んで実行する。
-
-## 参照する順番
-
-開発依頼では、**作業のルール → 作業の種類 → 手順書 → 必要な能力 → 実際の検証**の順で考える。
-
-```mermaid
-flowchart TD
-    A["ユーザーが開発を依頼"] --> B["AGENTS.md<br/>開発原則・作業権限"]
-    B --> C["workflow-router<br/>作業の種類を判断"]
-    C --> D["Playbook<br/>作業全体の手順"]
-    D --> E["必要なSkills<br/>調査・設計・実装・検証"]
-    E --> F["成果物を確認して報告"]
-    F -. "追加の調査や修正が必要な場合" .-> E
-```
-
-- **[AGENTS.md](../AGENTS.md)**：作業全体に共通する判断基準と、Git操作・外部変更などの権限を定める。どのPlaybookよりも優先する。
-- **[workflow-router](skills/workflow-router/SKILL.md)**：依頼に合うPlaybookを選択するためのSkill。該当ファイルを実際に読んでから作業する。
-- **[Playbooks](playbooks/)**：再現、原因調査、修正、検証など、作業全体の進め方を定める。
-- **[Skills](skills/)**：各段階で必要な具体的な技法を提供する。Playbookを介さず単独で使う場合もある。
-- **検証・報告**：実際の成果物で完了条件を確認する。PlaybookやSkillを読んだだけでは完了にならない。
-
-### 例：バグを修正する場合
-
-```mermaid
-flowchart TD
-    A["このバグを修正して"] --> B["bug-fix.md<br/>修正全体の手順を読む"]
-    B --> C["再現と原因調査"]
-    C --> D["why<br/>変更履歴が必要なら調査"]
-    D --> E["architect<br/>設計変更が必要なら使用"]
-    E --> F["tdd<br/>再現テストが実用的なら使用"]
-    F --> G["修正後に元の不具合を再検証"]
-    G --> H["blast-radius<br/>影響範囲を確認"]
-    H --> I["結果を報告"]
-```
-
-これは一例であり、**すべてのSkillを毎回順番に使用するという意味ではない**。例えば読み取りだけの調査なら `investigation` Playbookと `how` Skillで十分な場合がある。簡単な文章修正では、Playbookを使わず `technical-writing` Skillを直接使ってもよい。
-
-### Cursorでの読み込みに関する注意
-
-`20-scripts/cursor.sh` の実行後、Skillsは `~/.cursor/skills/`、Playbooksは `~/.cursor/playbooks/` から参照できるようになる。
-
-ただし、`~/.cursor/playbooks/` は**Playbookの保存先として作成したシンボリックリンク**であり、Cursorによる自動検出機能ではない。Playbookを実際に読むには、`workflow-router` またはプロジェクト側の指示が必要。
-
-また、`environment/AGENTS.md` はほかのリポジトリへ自動で適用されない。別プロジェクトでは、そのプロジェクトの指示やCursorの共通ルールに従う。必要なら `workflow-router` の使用を明示して、選択したPlaybookの実ファイルを確認する。
+[pstack](https://github.com/cursor/plugins/tree/main/pstack)を基にした日本語版Skills・Playbooks。共通の開発原則は[AGENTS.md](../AGENTS.md)。
 
 ## よく使うSkills
 
@@ -88,12 +36,6 @@ flowchart TD
 | [show-me-your-work](skills/show-me-your-work/SKILL.md) | 作業中の重要な判断、理由、根拠、結果をTSVに追記し、後から追跡できるようにする。 | 長期間の作業、並列作業、後から第三者が判断を確認する必要があるとき。 |
 | [typescript-best-practices](skills/typescript-best-practices/SKILL.md) | 型の表現、外部入力の検証、網羅性、型アサーションの削減などを扱う。 | TypeScriptの型設計や実装修正時。principle-type-system-disciplineを補完する。 |
 
-## Playbookの選択
-
-[workflow-router](skills/workflow-router/SKILL.md) は開発依頼に対応したPlaybookを選び、手順書を明示的に読み込むためのSkill。Cursorでは `~/.cursor/skills/workflow-router/` から認識させる。
-
-PlaybooksはSkillとして直接自動検出されない。ルーターが読み込む手順書は `~/.cursor/playbooks/` にリンクする。これにより、ほかのプロジェクトでもリポジトリ内の同じ手順書を参照できる。
-
 ## 開発原則
 
 `skills/principle-*/SKILL.md`に24件の原則Skillsを配置している。共通の判断基準は[AGENTS.md](../AGENTS.md)にまとめ、具体的な原則は関連するSkillから参照する。
@@ -102,7 +44,7 @@ PlaybooksはSkillとして直接自動検出されない。ルーターが読み
 
 ## Playbooks
 
-手順書は`30-ai/playbooks/`に配置している。**Playbook名は作業の種類を表すもので、名前だけで役割が分かりにくいため、日本語の説明と使うタイミングを併記する。**
+作業全体の手順書。
 
 ### 調査・設計・実装
 
@@ -146,25 +88,14 @@ PlaybooksはSkillとして直接自動検出されない。ルーターが読み
 | [multi-phase-plan](playbooks/multi-phase-plan.md) | 実装せず、PR単位の依存関係、実装順、検証条件を備えた計画を作る。 | 大きな変更を複数フェーズ・PRに分けて先に計画したいとき。 |
 | [worktree-cleanup](playbooks/worktree-cleanup.md) | 使用中・未コミットの作業を識別し、安全性を確認してworktreeや不要データを整理する。 | 作業ツリーが増えて容量を圧迫しているとき。削除には事前確認が必要。 |
 
-### 使い分けの例
+## ドキュメント
 
-- **コードを理解したい**：`how`。調査全体の報告形式も必要なら`investigation` Playbook。
-- **不具合を直したい**：`bug-fix` Playbook。必要に応じて`why`、`architect`、`tdd`、`blast-radius`を利用。
-- **機能を追加したい**：`feature` Playbook。設計には`architect`、複数案の比較には`arena`。
-- **内部構造だけ整理したい**：`refactoring` Playbook。事前に振る舞いを固定し、後から差分を検証。
-- **READMEを書き直したい**：`technical-writing` Skillと`unslop` Skill。
-- **Skillsの効果を比較したい**：`eval` Playbook。候補ごとの成果物を同じ条件で比較。
+- [作業フロー](docs/workflow.md) — SkillsとPlaybooksの使い分け、参照順序、実行例
 
-## Cursorでの利用
+## Cursor
 
-[20-scripts/cursor.sh](../20-scripts/cursor.sh)で、`~/.cursor/skills/`に各Skillへのシンボリックリンクを作成し、`~/.cursor/playbooks` にPlaybooksディレクトリへのリンクを作成する。既存の同名ファイル・ディレクトリは上書きせず、同じスクリプトを繰り返し実行できる。
+[20-scripts/cursor.sh](../20-scripts/cursor.sh)でSkillsとPlaybooksをシンボリックリンクする。
 
-Playbooksは独立した自動検出Skillではなく、`workflow-router`やルートの`AGENTS.md`から参照する手順書。**別プロジェクトではこのリポジトリの`AGENTS.md`は自動適用されない**。グローバルに認識させた`workflow-router`を利用するか、対象プロジェクトに明示的な参照ルールを設定する。
+## 出典・ライセンス
 
-公式pstackのPlaybooksにコミット、Push、PR作成、マージが書かれていても、実際の操作は`AGENTS.md`の権限制限を優先する。
-
-## 出典とライセンス
-
-原典：[cursor/plugins - pstack](https://github.com/cursor/plugins/tree/main/pstack)
-
-Copyright (c) 2026 Lauren Tan. 公式のMITライセンス全文は[LICENSE](LICENSE)に保持する。各SkillとPlaybookには対応する公式ソースへのリンクを記載している。
+原典：[pstack](https://github.com/cursor/plugins/tree/main/pstack)。MITライセンス全文は[LICENSE](LICENSE)を参照。
