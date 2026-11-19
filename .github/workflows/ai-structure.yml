@@ -1,0 +1,21 @@
+name: AI structure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "30-ai/**"
+      - "AGENTS.md"
+      - ".github/workflows/ai-structure.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check local AI structure
+        run: python3 30-ai/scripts/check_structure.py --self-test
