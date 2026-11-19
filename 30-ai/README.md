@@ -1,6 +1,6 @@
 # Skills
 
-[pstack](https://github.com/cursor/plugins/tree/main/pstack)を基にした日本語版Skills・Playbooks。共通の開発原則は[AGENTS.md](../AGENTS.md)。
+[pstack](https://github.com/cursor/plugins/tree/main/pstack)から採用したSkills・Playbooksと、この環境独自の設定を管理する。採用した公式ファイルは原文を省略せず収録し、用途の説明は日本語で記載する。共通の開発原則と操作権限は[AGENTS.md](../AGENTS.md)。
 
 ## よく使うSkills
 
@@ -98,4 +98,4 @@
 
 ## 出典・ライセンス
 
-原典：[pstack](https://github.com/cursor/plugins/tree/main/pstack)。MITライセンス全文は[LICENSE](LICENSE)を参照。
+原典：[pstack](https://github.com/cursor/plugins/tree/main/pstack)。公式由来のSkills 41件、Playbooks 22件、補助ファイル4件は、取得した公式リポジトリの内容とGit blob SHAが一致する。独自の `workflow-router` と `AGENTS.md` は対象外。MITライセンス全文は[LICENSE](LICENSE)を参照。
