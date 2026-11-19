@@ -1,18 +1,9 @@
-
 ---
 name: why
-description: 設計の理由、技術選定、変更の経緯、回帰の背景を調べるときに使用する。
+description: "Use for 'why does X work this way', 'why we picked Y', design rationale, regressions, postmortems, or data-backed thresholds. Returns a cited read on decisions and tradeoffs. Use how for runtime behavior."
+disable-model-invocation: true
 ---
 
 # Why
 
-出典: https://github.com/cursor/plugins/blob/main/pstack/skills/why/SKILL.md
-
-現在のコードから設計理由を推測せず、記録を調査する。
-
-- 対象を導入したコミットとPRを確認する。
-- PRの議論や設計記録を読む。
-- 導入後の変更履歴を確認する。
-- 作成者が明示した判断と理由を出典付きで説明する。
-- 自分の推測は推測として区別する。
-- 記録から確認できない内容は不明と伝える。
+Answer from the record, not the code: read the commits and PR discussions that introduced the target and each later change, and other sources if the trail is thin. Cite what the authors wrote, mark your own inferences as inferences, and say what the record does not answer.

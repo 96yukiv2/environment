@@ -1,44 +1,42 @@
-
 ---
 name: tdd
-description: TDDや回帰テストを求められた場合、または安価で明確なテストがあるバグ修正で使用する。
+description: "Use only when the user explicitly asks for TDD, a failing test, or a regression test, OR when the bug has an obvious cheap local test target. Skip when the test path is unclear, expensive, integration-heavy, or not requested."
+disable-model-invocation: true
 ---
 
-# TDD bug fix
+# TDD Bug Fix
 
-出典: https://github.com/cursor/plugins/blob/main/pstack/skills/tdd/SKILL.md
+When fixing a bug with a clear, cheap test path, make the broken behavior executable before changing production code. The goal is a focused regression test that fails before the fix and passes after it.
 
-修正前に不具合を実行可能な形で再現する。
+Do not force a test when it would be impractical. If the available test would require broad harness setup, brittle mocks, slow end-to-end infrastructure, production-only state, vague reproduction steps, or large unrelated fixture churn, skip adding a new test and use the closest useful verification instead.
 
-実用的なテスト方法がない場合は、無理にテストを追加しない。
+## Workflow
 
-## 手順
+1. **Understand the bug.** Identify the intended behavior, current behavior, affected path, and smallest observable reproduction.
+2. **Choose the narrowest executable check.** Prefer the closest unit, component, integration, or regression test already used for that codepath. If no practical test path is obvious, do not create one from scratch just to satisfy the workflow.
+3. **Write the failing test first.** Add the smallest focused test that would have caught the bug. The test should encode intended behavior, not mirror the current implementation.
+4. **Run the new test before fixing.** Confirm it fails for the intended reason. If it passes or fails for an unrelated reason, correct the test or reproduction before editing the implementation.
+5. **Fix the bug.** Make the smallest production change that satisfies the intended behavior while preserving nearby contracts.
+6. **Rerun the regression test.** Confirm the test now passes.
 
-1. 期待する動作、現在の動作、再現条件を確認する。
-2. 既存のテスト構成から最も適切な検証方法を選ぶ。
-3. 不具合を検出する回帰テストを書く。
-4. 修正前にテストを実行し、意図した理由で失敗することを確認する。
-5. 期待する振る舞いを満たすように実装を修正する。
-6. 同じテストを再実行し、成功を確認する。
-7. 影響に応じて関連テスト、型チェック、Lintなどを実行する。
+## If a Failing Test Is Impractical
 
-## 失敗テストが実用的でない場合
+Use the closest executable regression check instead: a targeted script, manual reproduction command, browser automation, snapshot comparison, log assertion, or focused integration check.
 
-理由を説明し、実行可能な別の検証方法を選ぶ。
+Prefer no new test over a bad test. A bad test is one that mostly tests mocks, encodes current implementation details, depends on timing or unrelated global state, needs expensive infrastructure for a small fix, or would be deleted immediately after proving the fix.
 
-例えば、再現スクリプト、ブラウザ操作、ログの検証、既存の統合テストなどを使用する。
+## Guardrails
 
-テストを作ること自体を目的にしない。
+- Do not change tests merely to match a wrong implementation.
+- Do not weaken existing assertions unless the expected behavior has genuinely changed and the reason is clear.
+- Keep the regression test focused on the bug. Avoid broad fixture churn or unrelated coverage expansion.
+- If the bug is flaky, make the test deterministic where possible and document the signal being locked down.
+- If the bug exposes a broader class of failures, first land the focused regression path, then consider additional sibling coverage.
 
-## 制約
+## Final Response
 
-- 誤った実装に合わせてテストを変更しない。
-- 理由なく既存のアサーションを弱めない。
-- 不具合と無関係なテストやFixtureを変更しない。
-- 不安定なテストは可能な限り決定的にする。
+Report the evidence, not just the outcome:
 
-## 報告
-
-修正前の失敗、修正後の成功、関連する検証結果を示す。
-
-修正前の失敗を確認できなかった場合は、理由と代替検証方法を示す。
+- Name the failing-before test or executable check and the failure it produced.
+- Name the passing-after test run and any nearby validation performed.
+- If failing-before evidence could not be demonstrated, state why and describe the closest regression check used instead.

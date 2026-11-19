@@ -1,41 +1,40 @@
-
 ---
 name: unslop
-description: AI特有の表現を取り除き、意味と文体を保ちながら文章を改善するときに使用する。
+description: Cut AI tells from any writing.
+disable-model-invocation: true
 ---
 
 # Unslop
 
-出典: https://github.com/cursor/plugins/blob/main/pstack/skills/unslop/SKILL.md
+Edit text to remove AI patterns. Scan for the patterns below, then rewrite. Preserve meaning and match the intended tone.
 
-意味と意図を維持し、不自然な表現を取り除く。
-ルール番号は原典との対応のため保持する。
+Rule numbers are stable ids that other skills cite. A removed rule leaves a gap.
 
-3. 事実を追加しない余分な修飾句を削る。
-5. 曖昧な出典を使わず、出典を特定するか記述を削る。
-7. 大げさなAI特有の語彙を避ける。
-8. 単純な事実は直接的な表現で書く。
-9. 対比構文を不必要に使わない。
-10. 内容を無理に3項目へ揃えない。
-11. 同じものには同じ名前を使う。
-12. 実際の尺度を示さない範囲表現を避ける。
-13. 長いダッシュによる文章の接続を避ける。
-14. コロンは一覧や例を導入するときに使用する。
-15. すべての固有名詞を太字にしない。
-16. 内容を重複させる太字の見出しを避ける。
-17. 見出しの大文字表記を統一する。
-18. 装飾的な絵文字を使わない。
-19. 引用符の表記を統一する。
-20. チャットボット特有の定型文を削る。
-22. 過剰な賛同や賞賛から回答を始めない。
-23. 意味のない前置きや冗長な言い回しを削る。
-24. 必要以上に推測表現を重ねない。
-25. 内容のない一般的な結論を追加しない。
-26. 抽象的な比喩より具体的な対象を示す。
-27. 何をするものなのか、具体的に説明する。
-28. 一文に複数の考えを詰め込みすぎない。
-29. 動作の主体を明確にする。
-30. 不要な副詞を削る。
-31. 平易で一般的な語を使用する。
-32. 比喩より直接的な説明を優先する。
-33. 省略しすぎず、意味の通る文を書く。
+3. No trailing "-ing" phrases that add no fact ("highlighting...", "ensuring...").
+5. No vague attributions ("experts believe"). Name the source or delete.
+7. No AI vocabulary: additionally, crucial, delve, enhance, foster, landscape, pivotal, showcase, testament, underscore, vibrant.
+8. Say "is" or "has", not "serves as", "stands as", "boasts", "features".
+9. No "not just X, but Y". State the point.
+10. Don't force ideas into threes.
+11. One name per thing. Repeat it.
+12. No "from X to Y" unless X and Y sit on a real scale.
+13. No em dashes, en dashes, or hyphens used as dashes, and no parentheses in their place. Use a period or a comma.
+14. A colon goes before a list or an example, never mid-sentence as a connector.
+15. Don't bold every proper noun or acronym.
+16. No bold label and colon that restates its line ("**Performance:** Performance improved..."). A bold lead-in that ends in a period and adds new detail is fine.
+17. Sentence case headings.
+18. No decorative emojis.
+19. Straight quotes.
+20. No chatbot phrases ("I hope this helps!", "Let me know if...").
+22. No praise or agreement openers. Respond directly.
+23. Cut filler. "In order to" becomes "to". Delete "it is important to note that".
+24. One hedge at most: "may".
+25. No generic conclusions. State specific plans or facts.
+26. No abstract metaphor nouns: substrate, wedge, vector, nexus, primitive, harness, surface, scaffolding, paradigm, ratchet, north star, flywheel. Use the concrete word.
+27. Say what it does, not how it feels. Name the mechanism or the number. Cut a sentence that could appear unchanged in another project's docs.
+28. One idea per sentence. Split a sentence the reader has to reread.
+29. Active voice. Name the actor unless it is unknown or doesn't matter.
+30. Cut adverbs or use a stronger verb. Give the number.
+31. Use the plain word: "use", not "utilize" or "leverage".
+32. No metaphor, aphorism, personified code, or figurative verb where a literal phrase exists.
+33. Write whole sentences with their articles and verbs. Spell out arrows and abbreviations.

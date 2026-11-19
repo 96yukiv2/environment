@@ -1,70 +1,70 @@
-
 ---
 name: technical-writing
-description: README、技術文書、設計書、PR説明、コミットメッセージを作成・レビューするときに使用する。
+description: "Layered technical-writing standard: Diátaxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages."
+disable-model-invocation: true
 ---
 
 # Technical writing
 
-出典: https://github.com/cursor/plugins/blob/main/pstack/skills/technical-writing/SKILL.md
+Write so a tired engineer understands on the first read.
 
-疲れているエンジニアでも一度で理解できる文章を書く。
+- Cut every word that does no work.
+- Use the short, everyday word: "use", not "utilize".
+- When a rule makes a sentence worse, fix the sentence another way or leave it alone.
+- Write the real symbol, file, flag, or command name, not a synonym or a description of it.
+- Don't invent jargon. Use the words a developer would say out loud. Say what a named pattern means the first time.
 
-- 不要な単語を削る。
-- 平易な言葉を使う。
-- 実際のシンボル、ファイル名、コマンドを正確に書く。
-- 新しい専門用語を作らない。
-- ルールに従うことで文章が悪くなるなら別の書き方を選ぶ。
+## Vary the rhythm
 
-## 文章のリズム
+- Mix sentence lengths. Split the sentence that carries two thoughts. Keep the long sentence that carries one.
+- Have a view in explanation. Keep reference dry.
+- Be specific. Not "schema changes can cause issues" but "a column rename fails the build".
 
-- 文の長さを適切に変える。
-- 一文に複数の考えを詰め込まない。
-- 抽象的な問題ではなく具体的な事象を書く。
-- 説明では判断を示し、リファレンスでは事実を記載する。
+## Pick the mode first (Diátaxis)
 
-## 文書の種類
+One document, one mode. Don't mix modes. Split and link instead.
 
-一つの文書には原則として一つの目的を持たせる。
+- **Tutorial: learning by doing.** Say what the learner will build. Every step produces a visible result, and you say what they should see. Explanation gets one clause and a link.
+- **How-to: steps to a goal.** Solve the reader's problem. Assume competence. Action only. Allow forks. Name the guide by the task.
+- **Reference: facts for lookup.** Only describe. Be dry, complete, and sure. Mirror the structure of the thing described.
+- **Explanation: understanding and why.** One bounded topic. Give context: design decisions, history, constraints, alternatives. Opinion is allowed here and nowhere else.
 
-- Tutorial: 手を動かして学ぶ。
-- How-to: 目的を達成する手順を示す。
-- Reference: 検索・確認のための事実を記載する。
-- Explanation: 背景、設計理由、制約、選択肢を説明する。
+## Write sentences to the reader (Google developer style)
 
-異なる目的の内容は文書を分けて相互参照する。
+- Talk to the reader as "you", in the present tense.
+- Say who does what. Passive is fine only when the actor is unknown or beside the point.
+- Write instructions as commands. Put the condition before the instruction and the common case first.
+- No buzzwords, no figurative language, no "please", and never "simply", "easy", or "quickly" in a procedure.
+- Don't pre-announce, and don't start consecutive sentences with the same phrase.
+- Link with words that say where the link goes.
+- Headings carry the point, in sentence case. One h1 per page, no skipped levels.
+- Numbered lists for sequences, bullets for everything else. Introduce a list with a complete sentence. Keep items parallel.
+- Code goes in code font. UI elements go in bold. Use serial commas. Drop "etc.".
 
-## 読者に向けた文章
+## Make statements load one at a time (STE rules)
 
-- 動作の主体と対象を明確にする。
-- 手順は命令形で書く。
-- 条件を先に示し、一般的なケースから説明する。
-- 曖昧な副詞や誇張表現を避ける。
-- 見出しには内容が分かる名前を付ける。
-- 手順には番号付きリストを使う。
-- コード、UI要素、リンクは正確に表記する。
+- One instruction per sentence. One thought per sentence everywhere else.
+- Split instructions longer than about 20 words and other sentences longer than about 25.
+- Put the warning or condition before the step it guards.
+- Keep "the" and "a".
+- Give each word one meaning, and pick one word per action.
+- Write procedures as direct commands, never as narration and never in the passive.
+- Avoid "-ing" words where you can.
 
-## 一文の情報量
+## Leave no sentence open to two readings (Global English)
 
-- 一文には原則として一つの指示を書く。
-- 長すぎる文章は分割する。
-- 警告や前提条件は操作より先に示す。
-- 同じ単語に複数の意味を持たせない。
+- Keep words like "only" and "not" next to the word they change.
+- Break up long noun strings.
+- Make every "it", "they", and "this" point at one obvious thing. Never use "this" or "which" to point at a whole clause.
+- Don't drop verbs, or the small words that show structure, such as "that".
+- Repeat the article in a series when it prevents a misread. Say which parts "and" or "or" joins.
+- Use periods, not semicolons or em dashes. No slashes, and no "(s)". Make text in parentheses a full grammatical unit.
+- Call each thing by one name, everywhere.
+- Skip idioms, colloquialisms, Latin abbreviations, and metaphors.
 
-## 曖昧さを取り除く
+## Voice and repo specifics
 
-- 否定や限定がかかる対象を明確にする。
-- 長い名詞の連続を避ける。
-- 代名詞が何を指すか明確にする。
-- 必要な接続表現を省略しない。
-- 同じ対象には一貫した名前を使用する。
-- 慣用句や比喩に依存しない。
-
-## 文書とリポジトリの規則
-
-- 文書を編集する際はunslopも適用する。
-- PR説明とコミットメッセージにも文章ルールを適用する。
-- PR説明は短時間で確認できる内容にする。
-- 製品UIの文言には製品固有のガイドラインを使う。
-- コード例には実際のパスやコマンドを記載する。
-- 数値やファイル構成の主張は検証可能にする。
+- Apply the **unslop** skill to every doc this skill touches. That skill owns the slop-pattern catalog: AI vocabulary, filler, hedging, formatting tells.
+- PR descriptions and commit messages are writing too. Every layer except Diátaxis applies to them. A PR body is a briefing that a reviewer can read in under a minute. Do not paste swarm logs, SHA lists, or metric tables. Link them.
+- Product UI strings are not documentation. Use your product's copy guidelines for those.
+- Indent code snippets with tabs. Write real paths. Make every count or tree claim true at the commit that lands it, and include the command that regenerates it.
