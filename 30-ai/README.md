@@ -44,6 +44,12 @@ Lauren Tanの[pstack](https://github.com/cursor/plugins/tree/main/pstack)を基�
 | [show-me-your-work](skills/show-me-your-work/SKILL.md) | 作業中の重要な判断、理由、根拠、結果をTSVに追記し、後から追跡できるようにする。 | 長期間の作業、並列作業、後から第三者が判断を確認する必要があるとき。 |
 | [typescript-best-practices](skills/typescript-best-practices/SKILL.md) | 型の表現、外部入力の検証、網羅性、型アサーションの削減などを扱う。 | TypeScriptの型設計や実装修正時。principle-type-system-disciplineを補完する。 |
 
+## Playbookの選択
+
+[workflow-router](skills/workflow-router/SKILL.md) は開発依頼に対応したPlaybookを選び、手順書を明示的に読み込むためのSkill。Cursorでは `~/.cursor/skills/workflow-router/` から認識させる。
+
+PlaybooksはSkillとして直接自動検出されない。ルーターが読み込む手順書は `~/.cursor/playbooks/` にリンクする。これにより、ほかのプロジェクトでもリポジトリ内の同じ手順書を参照できる。
+
 ## 開発原則
 
 `skills/principle-*/SKILL.md`に24件の原則Skillsを配置している。共通の判断基準は[AGENTS.md](../AGENTS.md)にまとめ、具体的な原則は関連するSkillから参照する。
@@ -107,9 +113,9 @@ Lauren Tanの[pstack](https://github.com/cursor/plugins/tree/main/pstack)を基�
 
 ## Cursorでの利用
 
-[20-scripts/cursor.sh](../20-scripts/cursor.sh)で、`~/.cursor/skills/`に各Skillへのシンボリックリンクを作成する。既存ファイルは上書きしない。
+[20-scripts/cursor.sh](../20-scripts/cursor.sh)で、`~/.cursor/skills/`に各Skillへのシンボリックリンクを作成し、`~/.cursor/playbooks` にPlaybooksディレクトリへのリンクを作成する。既存の同名ファイル・ディレクトリは上書きせず、同じスクリプトを繰り返し実行できる。
 
-Playbooksは独立した自動検出Skillではなく、ルートの`AGENTS.md`から参照する手順書。**別プロジェクトでは、このリポジトリの`AGENTS.md`やPlaybooksが自動適用されるとは限らない**ため、対象プロジェクト側でも参照先を設定する必要がある。
+Playbooksは独立した自動検出Skillではなく、`workflow-router`やルートの`AGENTS.md`から参照する手順書。**別プロジェクトではこのリポジトリの`AGENTS.md`は自動適用されない**。グローバルに認識させた`workflow-router`を利用するか、対象プロジェクトに明示的な参照ルールを設定する。
 
 公式pstackのPlaybooksにコミット、Push、PR作成、マージが書かれていても、実際の操作は`AGENTS.md`の権限制限を優先する。
 

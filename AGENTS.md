@@ -1,5 +1,5 @@
 
-# Poteto mode
+# 開発原則
 
 出典: https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/SKILL.md
 
@@ -232,6 +232,6 @@
 
 ## プレイブック
 
-作業内容に対応する手順書を `30-ai/playbooks/` から読み、各段階の目的・検証条件をタスクとして整理する。
+作業内容に対応する手順書を `30-ai/playbooks/` から読み、各段階の目的・検証条件をタスクとして整理する。Cursorの別プロジェクトでは、`~/.cursor/playbooks/` にリンクされた手順書を参照し、`workflow-router` Skillから適切なPlaybookを選択する。
 
 既存の手順に合わない複雑な作業は `figure-it-out` を使う。各Playbookの原典にPR作成、コミット、Push、マージが含まれていても、それらの実行は本ファイルの「自律性」にある許可条件を満たした場合だけ行う。

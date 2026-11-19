@@ -25,6 +25,22 @@ for source in "$source_dir"/*; do
   printf 'LINK: %s\n' "$name"
 done
 
+playbook_src="$repo_dir/30-ai/playbooks"
+playbook_target="$HOME/.cursor/playbooks"
+if [[ ! -d "$playbook_src" ]]; then
+  printf 'Playbooks directory not found: %s\\n' "$playbook_src" >&2
+  exit 1
+fi
+
+if [[ -L "$playbook_target" && "$(readlink "$playbook_target")" == "$playbook_src" ]]; then
+  printf 'OK: playbooks\\n'
+elif [[ -e "$playbook_target" || -L "$playbook_target" ]]; then
+  printf 'SKIP (exists): %s\\n' "$playbook_target" >&2
+else
+  ln -s "$playbook_src" "$playbook_target"
+  printf 'LINK: playbooks\\n'
+fi
+
 agent_src="$repo_dir/30-ai/agents/comment-sicko.md"
 agent_target="$HOME/.cursor/agents/comment-sicko.md"
 if [[ -f "$agent_src" ]]; then
