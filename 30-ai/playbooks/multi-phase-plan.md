@@ -1,17 +1,11 @@
-# multi-phase-plan
+### Multi-phase or multi-PR plan
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/multi-phase-plan.md
+**You own the plan, not the code. The plan is a checklist an owner runs box by box and the operator audits from the evidence.** The plan is the deliverable. Do not implement.
 
-複数PRや複数段階の変更を設計する手順。成果物は計画であり、実装しない。
+1. When the change is one or two files with an obvious approach, skip the plan. Say so and stop.
+2. Settle open questions by prototype before you write, per `playbooks/prototype.md`. Ask the operator only about a product or preference call that no run can settle.
+3. Write the plan file. Open with what changes, the PR ids in landing order, and the dependency graph, which says which PRs are independent and branch from trunk, which wait for which, and the files each may touch. Then one section per PR. One PR is one change with its own evidence (the **sequence-verifiable-units** principle skill). Each section has checkboxes for what it depends on, the files it edits, the one change it builds, the result you see, and its verification.
+4. Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked. Each live box drives the real surface with a concrete scenario and a pass predicate. The perf box names the metric, the probe, the trunk baseline measured first, and the number that fails. A PR that changes an interaction waits for the operator's review before merge.
+5. Hand back the plan path and stop. Execution starts on the operator's explicit go.
 
-1. 明らかな方法で1〜2ファイルだけ変える作業なら、過剰な計画を作らずその理由を説明する。
-2. 検証で解決できる未決事項はprototypeで先に比較する。ユーザーの製品方針や好みに関わる判断のみ確認する。
-3. 計画ファイルには変更結果、PRの着地順、依存関係、触るファイルを最初に記す。各PRは独立した検証単位とし、必要な前提、編集対象、変更内容、成功条件、確認方法をチェックボックスで整理する。
-4. テストだけを完成条件にしない。実際の動作、必要な性能、計測の基準値と失敗基準を示す。操作に関わる変更はマージ前にユーザーのレビューを受ける。
-5. 計画のパスを返して止まる。実行は依頼者が明示的に開始を指示してから行う。
-
-報告は計画へのパス、各PRの順序と依存、レビューが必要な段階、未検証事項。
-
-## 操作権限
-
-原典の実行権限に関する指示より、ルートのAGENTS.mdを優先する。外部プラグインやCursor固有の機能がない場合は、実施したふりをせず、利用できる検証方法と制約を報告する。
+**Reply:** the plan path, the PR ids with their dependencies and the review-gated set, and what stays unproven.

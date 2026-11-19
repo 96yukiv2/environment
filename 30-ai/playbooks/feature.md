@@ -1,20 +1,21 @@
-# feature
+### Feature
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/feature.md
+**You own the design. Plan, review, verify.** Delegate implementation. Stay in the lead.
 
-機能開発の設計・計画・検証の責任を負う。実装担当を分けても最終的な差分を確認する。
+1. Trace the affected subsystem.
+2. `architect` for the shape.
+3. Write the throughput checkpoint as four todo items. A dimension that genuinely does not apply (single file, no fan-out) keeps its item with `n/a: <reason>` rather than being dropped:
+   - **Blocking first steps.** Gates run before fan-out.
+   - **Independent workstreams.** Disjoint files, services, or layers parallelize. Shared writes serialize.
+   - **Shared mutable state.** Default to splitting the target (the **separate-before-serializing-shared-state** principle skill). Serialize only for real invariants.
+   - **Smallest safe decomposition.** If one worker is best, name why.
+4. Delegate code-writing to a subagent using your configured feature model (default `claude-opus-5-5-xhigh-fast`) with a specific scope (file paths, named data shape and its organizing structure per **principle-model-the-domain**, a state machine over scattered booleans, a table/registry over branching, a typed model over repeated shape assumptions, chosen before the delegate writes logic, and success criteria). Pick each subagent's reasoning level for the job, per the Subagents section. When the implementation admits multiple valid shapes (error handling, abstraction layer, test structure), delegate via the **arena** skill instead so the runners surface the alternatives and the cross-judge guards the pick. Mandatory: no skip-with-reason escape, and Laziness Protocol does not override it (the gain is review separation, not lines saved). A subagent forbidden to spawn satisfies this by owning the diff directly with the same review separation. No "standing by" reply that waits on a nested agent. Surgical edits, re-ground against the source for upstream-derived files. Port shared-primitive improvements to all consumers and verify each. Commit liberally.
+5. Verify on the matching surface. "Inconclusive" or wrong-surface is not a pass. Flag it.
+6. Rebase into small, ordered commits. Stack follow-ups.
+   Use the **sequence-verifiable-units** principle skill, building, verifying, and committing each small unit before the next.
+7. If the design is contested, `interrogate` before shipping.
+8. Run **Opening a PR**.
 
-1. 変更が触れる既存サブシステムを追跡する。
-2. architectで型、関数、モジュールの形を決める。
-3. 作業分割のチェックポイントとして、①先に終える阻害条件、②独立して進められる作業、③共有可変状態、④最小の安全な分割単位をそれぞれ明示する。該当しない項目も理由付きで残す。
-4. データ構造を確定してから実装する。可能なら担当範囲を分割する。複数の実装案が妥当な場合はarenaを使い、別案と独立したレビューを行う。共有箇所を変更したら全利用箇所へ波及させる。
-5. 実際の機能を操作して確認する。不確かな結果を成功としない。
-6. 作業を検証可能な小単位へ分ける。コミットなどのGit操作は許可条件を守る。
-7. 設計に争点があるならinterrogateで反証する。
-8. PRが明示的に依頼されている場合はopening-a-prへ進む。
+Code-coupled work (one feature, one migration) goes to a single owner with the checkpoint inline. That owner fans out internally after the blocking phase. Parent-level fan-out is for slices that produce independent artifacts (audits, cross-subsystem investigations, competing experiments). Rewrite the checkpoint at phase boundaries. Spawn a fresh owner rather than chaining interrupts.
 
-報告には実装した機能、選択理由、分割方法、残る論点を示す。
-
-## 操作権限
-
-原典にコミット、Push、PR作成などの指示が含まれていても、実行にはユーザーの明示的な指示が必要。ルートのAGENTS.mdを優先する。
+**Reply:** what you built, what you chose and why, the throughput checkpoint, open decisions. Tables for design alternatives.

@@ -1,18 +1,15 @@
-# bug-fix
+### Bug fix
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/bug-fix.md
+**You own this task. Plan, review, verify.** Delegate investigation and the fix to subagents, stay in the lead. Pick each subagent's reasoning level for the job, per the Subagents section.
 
-バグ修正では担当者が計画・レビュー・検証の責任を負う。症状に対する保険的なガードを「効くかもしれない」だけで追加しない。実行時の証拠に結びついた変更だけ残す。
+Be scientific. Every shipped line traces to runtime evidence. Belt-and-suspenders that "might help" is a hypothesis, not a fix. It does not ship. When evidence refutes a hypothesis, revert what it motivated. The smallest change the evidence justifies ships, nothing more.
 
-1. 実際に問題が起きる環境で自分で再現する。直接再現できなければ条件を絞るか計測を追加する。
-2. 仮説を列挙し、問題領域を半分ずつ除外するよう調査する。関連処理を追い、回帰履歴にはwhyを使い、実行時のログや状態で原因の仕組みを確定する。否定された仮説に基づく修正は戻す。
-3. 関数境界をまたぐ場合はarchitectで形を決め、担当範囲を明確にして実装する。
-4. 最初の再現手順を同じ環境で実行し、修正後に問題が消えたことを確認する。単体テスト成功だけで実運用の不具合解消を断定しない。
-5. 安価なテストが可能ならtddで失敗テストを先に作る。検証可能な単位ごとに進める。原典のコミット順序指定はAGENTS.mdのGit操作権限を優先する。
-6. PR作成手順は許可があればopening-a-prを読む。
+1. Reproduce it yourself on the matching surface via the control skill (Non-negotiables), even when a debug or instrumentation protocol says to ask the user to reproduce. Ask the user only with a stated, specific reason the control surface cannot reach the target, and only after driving it as far as it goes. If it won't reproduce directly, synthesize the trigger, tighten conditions, or instrument until it fires.
+2. Binary-search the cause. Form the candidate hypotheses, then rule them out until one survives. Seed them with a trace of the affected subsystem and the **why** skill for regression history. Each pass, take the split that cuts the most remaining problem space, get runtime evidence, eliminate. When program state is unclear, add instrumentation or logging and read it as the code runs. Don't guess. Drive a long or stubborn hunt with Cursor's `/loop` command. Confirm the surviving *mechanism* with runtime evidence before step 3's `architect` or an `interrogate` fan-out.
+3. Plan the fix. If it crosses a function boundary, `architect` first. Delegate implementation to a subagent using your configured bug-fix model (default `claude-opus-5-5-xhigh-fast`) with a specific scope.
+4. Verify on the same surface. The original repro now passes. "Inconclusive" or wrong-surface is not a pass. Flag it. Unit tests show branch behavior, not bug absence.
+5. Stage the commits so the failing repro lands before the fix in git history. See the **tdd** skill for the failing-test-first cadence when the bug has a cheap local test path. Skip it when the test would be expensive, integration-heavy, or unclear.
+   This is the canonical **sequence-verifiable-units** principle skill, the failing test first and the fix on top.
+6. Run **Opening a PR**.
 
-報告には症状、根本原因、修正、修正前後の再現結果を載せる。
-
-## 操作権限
-
-原典にコミット、Push、PR作成などの指示が含まれていても、実行にはユーザーの明示的な指示が必要。ルートのAGENTS.mdを優先する。
+**Reply:** what was broken, root cause, fix, how you verified. Paste failing-then-passing repro output verbatim.

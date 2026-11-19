@@ -1,18 +1,13 @@
-# autonomous-run
+### Autonomous run
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/autonomous-run.md
+**You own the exit condition. Define done, then drive to it without stopping.**
 
-人間が継続的に介入しなくても完了条件に向けて進める作業。完了条件を先に定義し、その成否を実物で確認する。
+1. State the exit condition as a checkable predicate before the first iteration (tests green, repro fixed, all N PRs merged, pixel-diff zero).
+2. Pick the wake mechanism using Cursor's `/loop` command (a built-in, not a pstack skill). An event to watch (CI, a merge, a ref advancing) gets a watcher subagent that wakes you on the event, with a long time-based heartbeat as fallback. No event gets a fixed-interval heartbeat sized to when the result is worth re-checking. Pick each subagent's reasoning level for the job, per the Subagents section.
+3. Each iteration makes the smallest change the evidence justifies, verifies it against the predicate, commits if it advanced, discards changes that didn't help. Belt-and-suspenders that "might help" gets reverted, not left to ride.
+   Sequence the work via the **sequence-verifiable-units** principle skill, verifying each unit before the next instead of batching checks at the end.
+4. Mid-run discoveries that support the goal are yours. Address broken skills, related bugs, flaky verifiers, review noise, tooling failures, orphaned follow-ups, and fixable drift yourself via poteto-mode. Put out-of-band fixes in their own PR. Do not park reversible work for the human or use `AskQuestion`. Surface only irreversible actions, genuine product or preference calls no experiment can settle, or a real dead end. Keep the predicate as the main drive, and return to it after each side fix.
+5. Checkpoint every iteration via the **show-me-your-work** skill, a row for what changed and whether the predicate moved.
+6. Stop when the predicate is met. A plateau is not a stop, so keep going and pivot your approach to push past it. Surface a genuine dead end rather than spinning, and never relax the predicate to declare victory.
 
-1. 最初の試行前に、テスト全件成功、問題の再現解消、画面差分ゼロなどの検証可能な終了条件を書く。
-2. 結果を再確認する仕組みを選ぶ。イベントが監視できるなら監視担当、できなければ適切な間隔の再確認を用意する。Cursorに専用のループ機能があれば使用できるが、実行機能の存在を確認する。
-3. 各試行では証拠に基づく変更を一つ行い、完了条件で検証する。改善がなければ変更を破棄する。Git操作は権限条件を満たす場合に限る。
-4. 作業中に発見した依存Skillの故障、関連バグ、検証方法の欠陥は、許可された範囲で解消して元の目標へ戻る。製品方針や取り消せない操作は人間の判断を優先する。
-5. show-me-your-workで各試行と完了条件の変化を記録する。
-6. 終了条件を達成したら停止する。停滞しただけでは達成としない。実際に打開できない場合は課題を提示する。
-
-報告は終了条件、試行、採用・撤回の内容、最終判定。
-
-## 操作権限
-
-原典の実行権限に関する指示より、ルートのAGENTS.mdを優先する。外部プラグインやCursor固有の機能がない場合は、実施したふりをせず、利用できる検証方法と制約を報告する。
+**Reply:** the exit condition, iterations run, what landed, what was discarded, final predicate state.
