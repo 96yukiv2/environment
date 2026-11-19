@@ -1,18 +1,25 @@
-# perf-issue
+### Perf issue
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/perf-issue.md
+**You own the measurement story. Plan, review, verify the numbers.** Tie every fix to a measurement, don't read source instead of measuring.
 
-性能問題の修正ではソースを眺めただけで結論を出さず、実測で原因と改善を説明する。
+1. Capture a baseline trace via the matching control skill. Vet the baseline, and each later number, with the **benchmark-checklist** skill.
+2. Trace the code to ground hypotheses. Don't claim a perf ceiling without running it first.
+   Try the performance mantras in order, cheapest first:
+   1. Don't do it. Stop work whose result nothing uses rather than cheapening it.
+   2. Do it, but don't do it again.
+   3. Do it less.
+   4. Do it later.
+   5. Do it when they're not looking.
+   6. Do it concurrently.
+   7. Do it cheaper.
 
-1. 実際の問題を再現する環境でトレースを取得する。基準値はbenchmark-checklistで吟味する。
-2. コードの処理経路から仮説を立てる。改善方法は原典の順で試す。①不要な処理をやめる、②同じ処理を繰り返さない、③処理回数を減らす、④遅らせる、⑤利用者が待たない場所で処理する、⑥並列化する、⑦個別処理を安くする。目標に達したらそれ以上を追わない。
-3. 計測結果に基づく変更計画を立て、必要ならarchitectで境界を決める。各試行を検証可能な単位に分ける。
-4. 修正後に同じ環境で計測し、成果物の差分と数値を比較する。不確かな結果を成功としない。
-5. 性能の主張には根拠と再現方法を添える。PRは明示されたときだけ作成する。
-6. 連続的な最適化が必要ならhillclimbを使う。
+   When an earlier mantra meets the target, stop.
+3. Plan the fix from the trace. If it crosses a function boundary, `architect` first. Delegate implementation to a subagent using your configured perf-issue model (default `claude-opus-5-5-xhigh-fast`). Pick each subagent's reasoning level for the job, per the Subagents section. Review the diff. Capture a post-fix trace.
+   Apply the **sequence-verifiable-units** principle skill, verifying each attempt before trying the next.
+4. Parse and compare the artifacts (JSON to sqlite, diff). "Inconclusive" or wrong-surface is not a pass. Flag it.
+5. Cite the measurement in the PR.
+6. Run **Opening a PR**.
 
-報告には基準値、改善後の値、差分、計測の保存先を載せる。
+For sustained improvement against a metric rather than a one-off fix, use the Hillclimb playbook (`playbooks/hillclimb.md`).
 
-## 操作権限
-
-原典にコミット、Push、PR作成などの指示が含まれていても、実行にはユーザーの明示的な指示が必要。ルートのAGENTS.mdを優先する。
+**Reply:** baseline number, post-fix number, delta, artifact path.

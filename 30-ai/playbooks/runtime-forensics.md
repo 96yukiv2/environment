@@ -1,17 +1,11 @@
-# runtime-forensics
+### Runtime forensics
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/runtime-forensics.md
+**You own the diagnosis. Instrument the live process, don't theorize from source.** The deliverable is a cited diagnosis, not a fix.
 
-動作中プロセスを調べ、原因と証拠を示す。依頼がない限り修正しない。
+1. Capture the live signal on the matching surface via the control skill: a CPU profile for a spinning process, a heap snapshot for a leak, a CDP trace for a visual glitch. A real artifact, not a guess.
+2. Reduce the artifact to the smoking gun: the function on the hot path, the retainer chain from the leaked object to a GC root, the loop firing without input. Parse large artifacts in a subagent (the **guard-the-context-window** principle skill), keep the reduced finding in the main thread. Pick each subagent's reasoning level for the job, per the Subagents section.
+3. Prove the mechanism before believing it. Inject instrumentation via CDP eval on the running process, or hotfix the live code without reloading, to confirm the hypothesis cheaply.
+4. Map the finding back to source: file, symbol, the line that allocates or schedules.
+5. Throughput checkpoint stays one line: `throughput checkpoint: n/a, read-only forensics`.
 
-1. 実際の不具合に合う実行環境でシグナルを取得する。CPU高負荷にはCPUプロファイル、メモリリークにはヒープスナップショット、UI不具合にはトレースなどを使う。
-2. 実物の資料を解析し、原因を示す関数・参照経路・不自然なループなどに絞る。大量のデータはprinciple-guard-the-context-windowで分離する。
-3. 実行中の計測や検証を行い、推測した仕組みを確かめる。
-4. 発見をソースコードのファイル、シンボル、行へ対応付ける。
-5. 読み取り主体の調査として並列チェックポイントをn/aと報告する。
-
-報告は取得した資料、絞り込んだ発見、仕組みの実証、コード位置、成果物パス。原因特定後にBug fixまたはPerf issueへ引き継ぐ。
-
-## 操作権限
-
-原典にコミット、Push、PR作成などの指示が含まれていても、実行にはユーザーの明示的な指示が必要。ルートのAGENTS.mdを優先する。
+**Reply:** the signal captured, the reduced finding, how you proved the mechanism, the source location, artifact paths. No fix unless asked. Hand back to Bug fix or Perf once the cause is known.

@@ -1,16 +1,10 @@
-# pause-safely
+### Pause safely
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/pause-safely.md
+**You own a clean stop. Leave a checkpoint a cold-start agent can resume from.** This is explicit only. On "keep going", "going to bed, keep going", or "don't stop", do not pause.
 
-明示的に一時停止を求められた場合、安全な再開地点を残す。「作業を続けて」という依頼では停止しない。
+1. Stop at a safe boundary. Finish the current atomic step or back out of it. Start nothing new, and cancel any nested subagents.
+2. Take no irreversible action to pause. No PR and no push unless you already had one out.
+3. Make the work durable. Commit uncommitted edits as one clear `wip:` commit on the current branch so nothing is lost. If the tree is broken, say so in the commit body in one line.
+4. Write the resume note off-context. Capture intent, what you were doing, progress and what's verified, current state, next steps, key files, and gotchas. For the compaction trigger write it to a file like `/tmp/<slug>-resume.md`. If a show-me-your-work trail exists, point at it instead of duplicating it.
 
-1. 現在の小さな作業単位を完了するか取り消し、安全な境界で止まる。新しい作業は開始せず、必要なら子エージェントも止める。
-2. 停止のために不可逆な操作は行わない。既存の許可がないPR作成やPushをしない。
-3. 未コミットの変更を保全する。原典はwipコミットを作るが、ここではコミット許可がない場合は作らず、差分と保存先を報告する。
-4. 再開メモに目的、現在の進捗、検証済み事項、状態、次の操作、重要なファイル、注意点を記す。既存のshow-me-your-workログを活用し、重複させない。
-
-報告は停止位置、保存済みと未保存の状態、作成したコミットがあればその情報、再開時の最初の操作を示す。
-
-## 操作権限
-
-原典の実行権限に関する指示より、ルートのAGENTS.mdを優先する。外部プラグインやCursor固有の機能がない場合は、実施したふりをせず、利用できる検証方法と制約を報告する。
+**Reply:** where you are in the loop, what's on disk versus still in your head (paths, no diff dumps), the commits you made and whether the tree is clean, and the first action on resume. This is a pause, not a final report.

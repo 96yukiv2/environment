@@ -1,18 +1,14 @@
-# trace-forensics
+### Trace forensics
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/trace-forensics.md
+**You own the diagnosis from the artifact.**
 
-取得済みのトレースやプロファイルを固定された資料として解析する。動作中のプロセスを新しく計測するruntime-forensicsとは異なる。
+Distinct from **Runtime forensics**, which instruments the live process. Here the capture already exists. The artifact is a fixed dataset, read it, don't re-run it. Keep tooling generic: a DevTools or trace parser for cpuprofile and `.json.gz`, a text editor for a spindump, your heap tooling for a heapsnapshot.
 
-1. cpuprofile、圧縮JSON、spindump、heapsnapshotなど形式を判定して適した解析ツールを選ぶ。
-2. 大きい資料はSQLiteなどの検索可能な形へ変換し、サンプルやフレームを行単位で解析する。必要ならサブエージェントに分担する。
-3. 最も時間を占めるフレームや参照保持経路を調べ、原因を特定する。
-4. 資料のシンボルをソースのファイル・関数・行へ対応付ける。対応が取れなければ診断未完了と明示する。
-5. 修正前後の対になる資料があれば比較する。なければ強い仮説として扱い、確定原因と断定しない。
-6. 出典付き診断を報告し、修正は依頼された場合だけ行う。
+1. Identify the format and load it with the right tool. Parse large artifacts in a subagent (the **principle-guard-the-context-window** skill) and keep the reduced finding in the main thread. Pick each subagent's reasoning level for the job, per the Subagents section.
+2. Transform the raw artifact into a form you can query. Dump the trace or heap snapshot into sqlite, one row per sample, frame, or node. Reach the queryable shape before you read.
+3. Narrow to the cause. Query for the frames that hold the most time and walk the call tree to the hot path. For a leak, follow the retainer chain from the leaked object to a GC root. For a spindump, find the thread stuck on-CPU or blocked and its wait reason.
+4. Attribute to source. Map the hot frame to file, symbol, and line via the artifact's own symbols. A frame with no source mapping is not yet a diagnosis. Resolve the symbols, or say plainly the artifact does not carry them.
+5. If you have a paired capture, diff the before and after artifacts to confirm. Otherwise, mark the finding as the strongest hypothesis the artifact supports, not a confirmed cause.
+6. Hand back a cited diagnosis, no fix unless asked. Route to Bug fix or Perf issue once the cause is known. Throughput checkpoint stays one line: `throughput checkpoint: n/a, read-only forensics`.
 
-報告に形式、証拠、コード位置、確認の程度、資料のパスを含める。
-
-## 操作権限
-
-原典にコミット、Push、PR作成などの指示が含まれていても、実行にはユーザーの明示的な指示が必要。ルートのAGENTS.mdを優先する。
+**Reply:** the artifact and format, the reduced finding, the source location, the artifact paths, and whether a paired capture confirmed it.

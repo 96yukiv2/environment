@@ -1,17 +1,11 @@
-# visual-parity
+### Visual parity
 
-原典: https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/visual-parity.md
+**You own pixel-exact equivalence. The baseline is the spec. You do not touch it.** Equivalence is verified by image diff, not by eye.
 
-既存画面と移行先の表示をピクセル単位で一致させる。基準画像を仕様とし、書き換えない。
+1. Establish the baseline first, before any migration: a visual regression harness that screenshots the current component across its states, plus the target when matching two implementations. No baseline, no parity claim. A blocking prerequisite, not a follow-up.
+2. Anti-shortcut clauses, stated and held: no harness modifications, no baseline tampering, no component restructuring to make a diff pass. If the baseline looks wrong, stop and ask, don't edit it.
+3. Migrate one component at a time. Parallelize across worktrees, one owner per component (the **separate-before-serializing-shared-state** principle skill). Shared primitives migrate first as a blocking phase.
+4. Verify each component against its baseline via image diff on the matching surface via the control skill. A nonzero diff is a fail. Investigate the pixel delta. `/loop` per component until the diff is zero.
+5. Run **Opening a PR** per component or per safe batch.
 
-1. 変更前に状態別スクリーンショットを取得する回帰テストを整える。基準のない状態では一致を主張しない。
-2. 基準画像やテストを都合よく変更して合格させない。基準が誤っていると思われる場合は作業を停止し確認する。
-3. 部品ごとに分離して移行し、共通の部品は先に移行する。並列担当は別々の作業領域を持つ。
-4. 各部品を実際の画面で撮影し、画像差分を実行する。差分が残れば不合格として原因を調べる。
-5. PR作成は明示された場合だけopening-a-prに従う。
-
-報告には移行した部品、各画像差分、基準の場所、未完了を記す。
-
-## 操作権限
-
-原典にコミット、Push、PR作成などの指示が含まれていても、実行にはユーザーの明示的な指示が必要。ルートのAGENTS.mdを優先する。
+**Reply:** components migrated, the diff result for each, the baseline harness location, what's left.
