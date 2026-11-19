@@ -12,7 +12,7 @@ flowchart TD
     F -. "必要なら再調査" .-> E
 ```
 
-- **[AGENTS.md](../../../AGENTS.md)**：共通の開発原則と作業権限。
+- **[AGENTS.md](../../AGENTS.md)**：共通の開発原則と作業権限。
 - **[workflow-router](../skills/workflow-router/SKILL.md)**：依頼に対応したPlaybookを選ぶ。
 - **[Playbooks](../playbooks/)**：作業全体の流れ。例：調査→修正→検証。
 - **[Skills](../skills/)**：各段階で使う技法。単独でも利用できる。
