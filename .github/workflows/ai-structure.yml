@@ -1,6 +1,11 @@
 name: AI structure
 
 on:
+  pull_request:
+    paths:
+      - "30-ai/**"
+      - "AGENTS.md"
+      - ".github/workflows/ai-structure.yml"
   push:
     branches:
       - main
