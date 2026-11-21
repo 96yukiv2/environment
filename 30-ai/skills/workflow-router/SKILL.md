@@ -9,6 +9,16 @@ description: ユーザーが開発作業、調査、バグ修正、機能追加�
 
 原典: https://github.com/cursor/plugins/tree/main/pstack/skills/poteto-mode/playbooks
 
+## 担当範囲
+
+このSkillは作業開始時の**Playbook選択と手順の読み込み**を担当する。全工程の実行責任者ではない。
+
+- **担当する**: 依頼の目的・制約の把握、該当Playbookの選択、実ファイルの読み込み、検証ポイントの整理、参照先がない場合の報告
+- **担当しない**: 公式`poteto-mode`全体の再実装、サブエージェントやモデルの強制設定、権限の上書き、コミット・PR・マージの自動承認
+- **実行の責任**: 選んだPlaybookに従う実行主体が作業を進め、利用環境・対象プロジェクトの権限規則を優先する
+
+公式`poteto-mode`と異なり、独自の軽量な入口として維持する。必要な原則やSkillsは各段階で参照し、`workflow-router`がすべてのSkillを先読みしない。
+
 ## 読み込み場所
 
 このSkillと同じリポジトリを使っている場合は `30-ai/playbooks/` を参照する。Cursorのグローバル環境では `~/.cursor/playbooks/` のシンボリックリンク先を参照する。
